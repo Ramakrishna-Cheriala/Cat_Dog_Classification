@@ -1,0 +1,9 @@
+main_dir: artifacts
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_url: https://www.dropbox.com/scl/fi/d9do3ei67k2wel0wi60iz/main_data.zip?rlkey=bhetrom0hpnr29krkzhx2zrmf&dl=0
+  local_dir_files: artifacts/data_ingestion/main_data.zip
+  unzip_dirs: artifacts/data_ingestion/Data
+  split_data_dir: artifacts/data_ingestion/cat_dog
+  original_data_dir: artifacts/data_ingestion/Data/main_data
