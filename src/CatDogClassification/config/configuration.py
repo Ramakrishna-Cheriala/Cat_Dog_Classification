@@ -1,6 +1,9 @@
 from src.CatDogClassification.constants import *
 from src.CatDogClassification.utils.common import read_yaml, create_directory
-from src.CatDogClassification.entity.config_entity import DataIngestionConfig
+from src.CatDogClassification.entity.config_entity import (
+    DataIngestionConfig,
+    PrepareBaseModelConfig,
+)
 
 
 class ConfigurationManager:
@@ -26,3 +29,18 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+
+    def get_prepared_base_model(self) -> PrepareBaseModelConfig:
+        config = self.config.prepare_base_model
+        create_directory([config.root_dir])
+
+        prepare_base_model_config = PrepareBaseModelConfig(
+            root_dir=config.root_dir,
+            base_model_path=config.base_model_path,
+            updated_base_model_path=config.updated_base_model_path,
+            learning_rate=self.params.LEARNING_RATE,
+            classes=self.params.CLASSES,
+            input_shape=self.params.INPUT_SHAPE,
+        )
+
+        return prepare_base_model_config
