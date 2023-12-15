@@ -14,29 +14,27 @@ class PrepareBaseModel:
         self.input_shape = self.config.input_shape
 
     @staticmethod
-    def prepare_base_model(model, input_shape, freeze_all, freeze_till, learning_rate):
-        if freeze_all:
-            for layer in model.layers:
-                layer.trainable = False
-        elif (freeze_till is not None) and (freeze_till > 0):
-            for layer in model.layers[:-freeze_till]:
-                layer.trainable = False
+    def prepare_base_model(model, input_shape, weights, include_top, learning_rate):
+        base_model = tf.keras.applications.VGG16(
+            weights=weights, include_top=include_top, input_shape=input_shape
+        )
+        base_model.trainable = False
 
-        model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=input_shape))
-        model.add(layers.MaxPooling2D((2, 2)))
+        model = models.Sequential(
+            [
+                base_model,
+                layers.Flatten(),
+                layers.Dense(512, activation="relu"),
+                layers.Dense(1, activation="sigmoid"),
+            ]
+        )
 
-        model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=input_shape))
-        model.add(layers.MaxPooling2D((2, 2)))
-
-        model.add(layers.Conv2D(32, (3, 3), activation="relu", input_shape=input_shape))
-        model.add(layers.MaxPooling2D((2, 2)))
-
-        model.add(layers.Flatten())
-        model.add(layers.Dense(512, activation="relu"))
-        model.add(layers.Dense(1, activation="sigmoid"))
+        lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+            initial_learning_rate=learning_rate, decay_steps=10000, decay_rate=0.9
+        )
 
         model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=lr_schedule),
             loss="binary_crossentropy",
             metrics=["accuracy"],
         )
@@ -49,8 +47,8 @@ class PrepareBaseModel:
         self.model = self.prepare_base_model(
             model=self.model,
             input_shape=self.input_shape,
-            freeze_all=True,
-            freeze_till=None,
+            weights=self.config.weights,
+            include_top=self.config.include_top,
             learning_rate=self.config.learning_rate,
         )
 

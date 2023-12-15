@@ -20,3 +20,20 @@ class PrepareBaseModelConfig:
     learning_rate: float
     classes: int
     input_shape: list
+    include_top: bool
+    weights: str
+
+
+@dataclass(frozen=True)
+class TrainingModelConfig:
+    root_dir: Path
+    updated_base_model_path: Path
+    trained_model_path: Path
+    training_data: Path
+    validation_data: Path
+    epochs: int
+    batch_size: int
+    weights: str
+    include_top: bool
+    input_shape: list
+    class_weights: dict

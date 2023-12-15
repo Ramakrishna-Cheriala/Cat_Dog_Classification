@@ -3,7 +3,6 @@ from src.CatDogClassification.entity.config_entity import DataIngestionConfig
 from src.CatDogClassification.components.Data_ingestion import DataIngestion
 from src.CatDogClassification import logger
 
-
 STAGE_NAME = "Data Ingestion"
 
 

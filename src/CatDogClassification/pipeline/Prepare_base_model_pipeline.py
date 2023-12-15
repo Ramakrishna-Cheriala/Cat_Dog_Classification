@@ -15,6 +15,7 @@ class PrepareBaseModelPipeline:
         config = ConfigurationManager()
         prepare_base_model_config = config.get_prepared_base_model()
         prepare_base_model = PrepareBaseModel(config=prepare_base_model_config)
+        # prepare_base_model.base_model()
         prepare_base_model.updated_base_model()
 
 

@@ -28,3 +28,30 @@ def create_directory(path_to_dir: list, verbose=True):
         os.makedirs(path, exist_ok=True)
         if verbose:
             logger.info(f"Created directory at: {path}")
+
+
+def save_json(path: Path, data: dict):
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
+    logger.info(f"json file saved at: {path}")
+
+
+@ensure_annotations
+def load_json(path: Path) -> ConfigBox:
+    with open(path) as f:
+        content = json.load(f)
+
+    logger.info(f"json file loaded succesfully from: {path}")
+    return ConfigBox(content)
+
+
+def decodeImage(imgstring, fileName):
+    imgdata = base64.b64decode(imgstring)
+    with open(fileName, "wb") as f:
+        f.write(imgdata)
+        f.close()
+
+
+def encodeImageIntoBase64(croppedImagePath):
+    with open(croppedImagePath, "rb") as f:
+        return base64.b64encode(f.read())

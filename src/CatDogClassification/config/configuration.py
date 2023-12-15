@@ -3,6 +3,7 @@ from src.CatDogClassification.utils.common import read_yaml, create_directory
 from src.CatDogClassification.entity.config_entity import (
     DataIngestionConfig,
     PrepareBaseModelConfig,
+    TrainingModelConfig,
 )
 
 
@@ -41,6 +42,33 @@ class ConfigurationManager:
             learning_rate=self.params.LEARNING_RATE,
             classes=self.params.CLASSES,
             input_shape=self.params.INPUT_SHAPE,
+            include_top=self.params.INCLUDE_TOP,
+            weights=self.params.WEIGHTS,
         )
 
         return prepare_base_model_config
+
+    def get_training_model(self) -> TrainingModelConfig:
+        training = self.config.training_model
+        prepare_base_model = self.config.prepare_base_model
+        training_data = os.path.join(self.config.data_ingestion.split_data_dir, "train")
+        validation_data = os.path.join(
+            self.config.data_ingestion.split_data_dir, "validation"
+        )
+        create_directory([training.root_dir])
+
+        prepare_training_model = TrainingModelConfig(
+            root_dir=training.root_dir,
+            updated_base_model_path=prepare_base_model.updated_base_model_path,
+            trained_model_path=training.trained_model_path,
+            training_data=Path(training_data),
+            validation_data=Path(validation_data),
+            epochs=self.params.EPOCHS,
+            batch_size=self.params.BATCH_SIZE,
+            weights=self.params.WEIGHTS,
+            include_top=self.params.INCLUDE_TOP,
+            input_shape=self.params.INPUT_SHAPE,
+            class_weights=self.params.CLASS_WEIGHTS,
+        )
+
+        return prepare_training_model

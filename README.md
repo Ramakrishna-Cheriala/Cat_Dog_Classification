@@ -24,8 +24,10 @@
 
 9. Update the dvc.yaml
 
-10. Data Ingestion\n
-11. Preparing Base model
-12. Model Training
-13. Model Evaluation
-14. Model Prediction
+################################
+
+1. Data Ingestion\n
+2. Preparing Base model
+3. Model Training
+4. Model Evaluation
+5. Model Prediction
